@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เครื่องวัดธาตุอาหารในดิน</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: #e8f0e8;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .poster {
+    width: 794px;
+    min-height: 1123px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, #1a5c2a 0%, #2e7d32 50%, #388e3c 100%);
+    padding: 28px 36px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 60px;
+    width: 260px; height: 260px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .logo-circle {
+    width: 60px; height: 60px;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .header-subtitle {
+    color: rgba(255,255,255,0.75);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+  .header-school {
+    color: rgba(255,255,255,0.9);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .header h1 {
+    color: #fff;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+    position: relative;
+    z-index: 1;
+  }
+  .header h1 span {
+    color: #a5d6a7;
+  }
+  .header-line {
+    width: 60px; height: 3px;
+    background: #a5d6a7;
+    margin: 10px 0 8px;
+    border-radius: 2px;
+  }
+  .header-authors {
+    color: rgba(255,255,255,0.8);
+    font-size: 12.5px;
+  }
+
+  /* === BODY === */
+  .body {
+    padding: 20px 28px 24px;
+  }
+
+  /* Accent strip */
+  .accent-strip {
+    display: flex;
+    gap: 0;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .accent-item {
+    flex: 1;
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .accent-item:nth-child(1) { background: #1b5e20; }
+  .accent-item:nth-child(2) { background: #2e7d32; }
+  .accent-item:nth-child(3) { background: #388e3c; }
+  .accent-item:nth-child(4) { background: #43a047; }
+  .accent-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: #a5d6a7;
+    line-height: 1;
+  }
+  .accent-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.85);
+    margin-top: 2px;
+  }
+
+  /* === SECTIONS === */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .full-col {
+    margin-bottom: 14px;
+  }
+
+  .card {
+    background: #f9fbe7;
+    border-radius: 8px;
+    padding: 14px 16px;
+    border-left: 4px solid #2e7d32;
+  }
+  .card.blue-accent { border-left-color: #1565c0; background: #e3f2fd; }
+  .card.orange-accent { border-left-color: #e65100; background: #fff3e0; }
+  .card.purple-accent { border-left-color: #6a1b9a; background: #f3e5f5; }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a5c2a;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-title .icon { font-size: 15px; }
+  .card.blue-accent .card-title { color: #1565c0; }
+  .card.orange-accent .card-title { color: #e65100; }
+  .card.purple-accent .card-title { color: #6a1b9a; }
+
+  .card p, .card li {
+    font-size: 12px;
+    color: #333;
+    line-height: 1.7;
+  }
+  .card ul { padding-left: 14px; }
+  .card li { margin-bottom: 2px; }
+
+  /* NPK display */
+  .npk-display {
+    background: #1a1a2e;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .lcd-screen {
+    background: #0d47a1;
+    border-radius: 4px;
+    padding: 10px 16px;
+    border: 3px solid #333;
+    flex: 1;
+  }
+  .lcd-line {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: #e3f2fd;
+    letter-spacing: 1px;
+    line-height: 1.8;
+    text-shadow: 0 0 8px rgba(100,180,255,0.8);
+  }
+  .npk-desc {
+    flex: 1;
+  }
+  .npk-desc p {
+    font-size: 12px;
+    color: #ccc;
+    line-height: 1.7;
+  }
+  .npk-desc .unit-badge {
+    display: inline-block;
+    background: #2e7d32;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 6px;
+  }
+
+  /* Component grid */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .comp-item {
+    background: #f5f5f5;
+    border-radius: 6px;
+    padding: 10px 8px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+  }
+  .comp-icon { font-size: 20px; margin-bottom: 4px; }
+  .comp-name {
+    font-size: 10px;
+    color: #333;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .comp-price {
+    font-size: 10px;
+    color: #2e7d32;
+    font-weight: 700;
+    margin-top: 3px;
+  }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f1f8e9;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+  }
+  .flow-box {
+    background: #2e7d32;
+    color: #fff;
+    border-radius: 6px;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 80px;
+    flex-shrink: 0;
+    line-height: 1.4;
+  }
+  .flow-arrow {
+    color: #2e7d32;
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Budget table */
+  .budget-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+  .budget-table th {
+    background: #2e7d32;
+    color: #fff;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+  }
+  .budget-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #333;
+  }
+  .budget-table tr:nth-child(even) td { background: #f9fbe7; }
+  .budget-table tr.total td {
+    font-weight: 700;
+    background: #e8f5e9;
+    color: #1a5c2a;
+  }
+
+  /* Result box */
+  .result-box {
+    background: linear-gradient(135deg, #1b5e20, #2e7d32);
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .result-icon { font-size: 40px; }
+  .result-text h3 {
+    color: #a5d6a7;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .result-text p {
+    color: rgba(255,255,255,0.88);
+    font-size: 11.5px;
+    line-height: 1.7;
+  }
+
+  /* Section header */
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .sec-bar {
+    width: 4px;
+    height: 18px;
+    background: #2e7d32;
+    border-radius: 2px;
+  }
+  .sec-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a5c2a;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: #1a5c2a;
+    padding: 12px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-text {
+    color: rgba(255,255,255,0.8);
+    font-size: 11px;
+  }
+  .footer-badge {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-circle">🌱</div>
+      <div>
+        <div class="header-subtitle"></div>
+        <div class="header-school"></div>
+      </div>
+    </div>
+    <h1>เครื่องวัด<span>ธาตุอาหารหลักในดิน</span><br>ด้วยเซนเซอร์ RS485 NPK Soil Sensor</h1>
+    <div class="header-line"></div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- STATS STRIP -->
+    <div class="accent-strip">
+      <div class="accent-item">
+        <div class="accent-num">3</div>
+        <div class="accent-label">ธาตุอาหาร (N-P-K)</div>
+      </div>
+      <div class="accent-item">
+        <div class="accent-num">RS485</div>
+        <div class="accent-label">โปรโตคอลสื่อสาร</div>
+      </div>
+      <div class="accent-item">
+        <div class="accent-num">18650</div>
+        <div class="accent-label">แบตเตอรี่ลิเธียม</div>
+      </div>
+      <div class="accent-item">
+        <div class="accent-num">1500฿</div>
+        <div class="accent-label">ต้นทุนรวม</div>
+      </div>
+    </div>
+
+    <!-- ROW 1: ที่มา + วัตถุประสงค์ -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span class="icon">📋</span>ที่มาและความสำคัญ</div>
+        <p>ดินเป็นปัจจัยสำคัญในการเกษตร ธาตุอาหารหลักในดิน ได้แก่ ไนโตรเจน (N) ฟอสฟอรัส (P) และโพแทสเซียม (K) มีผลโดยตรงต่อการเจริญเติบโตของพืช การวัดค่าด้วยวิธีดั้งเดิมใช้เวลานานและมีต้นทุนสูง โครงงานนี้จึงพัฒนาเครื่องมือวัดค่าธาตุอาหารแบบพกพา ราคาประหยัด ใช้งานได้ทันที</p>
+      </div>
+      <div class="card blue-accent">
+        <div class="card-title"><span class="icon">🎯</span>วัตถุประสงค์</div>
+        <ul>
+          <li>ออกแบบและสร้างเครื่องวัด N-P-K แบบพกพา</li>
+          <li>อ่านค่าผ่านเซนเซอร์ RS485 และแสดงผลบน LCD</li>
+          <li>ใช้งานในภาคสนามโดยไม่ต้องพึ่งไฟฟ้าหลัก</li>
+          <li>ลดต้นทุนการวิเคราะห์ดินสำหรับเกษตรกร</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FLOW DIAGRAM -->
+    <div class="sec-header">
+      <div class="sec-bar"></div>
+      <div class="sec-label">หลักการทำงานของระบบ</div>
+    </div>
+    <div class="flow">
+      <div class="flow-box">🌿<br>เสียบโพรบ<br>ลงดิน</div>
+      <div class="flow-arrow">▶</div>
+      <div class="flow-box">📡<br>เซนเซอร์ NPK<br>RS485</div>
+      <div class="flow-arrow">▶</div>
+      <div class="flow-box">🔄<br>MAX485<br>แปลงสัญญาณ</div>
+      <div class="flow-arrow">▶</div>
+      <div class="flow-box">💻<br>Arduino Uno<br>ประมวลผล</div>
+      <div class="flow-arrow">▶</div>
+      <div class="flow-box">📺<br>LCD 16×2<br>แสดงผล</div>
+      <div class="flow-arrow">▶</div>
+      <div class="flow-box">🔋<br>แบต 18650<br>จ่ายไฟ</div>
+    </div>
+
+    <!-- LCD DISPLAY MOCK -->
+    <div class="sec-header">
+      <div class="sec-bar"></div>
+      <div class="sec-label">ผลการแสดงผลบนหน้าจอ LCD</div>
+    </div>
+    <div class="npk-display">
+      <div class="lcd-screen">
+        <div class="lcd-line">N= 255 mg/kg</div>
+        <div class="lcd-line">P= 255 mg/kg</div>
+      </div>
+      <div class="npk-desc">
+        <p>หน้าจอ LCD 16×2 แสดงค่าธาตุอาหารในดินแบบเรียลไทม์ กดปุ่มเพื่อสลับแสดงค่า N, P และ K พร้อมหน่วยมิลลิกรัมต่อกิโลกรัม</p>
+        <span class="unit-badge">หน่วย: mg/kg (ppm)</span>
+      </div>
+    </div>
+
+    <!-- COMPONENTS -->
+    <div class="sec-header">
+      <div class="sec-bar"></div>
+      <div class="sec-label">อุปกรณ์และส่วนประกอบหลัก</div>
+    </div>
+    <div class="comp-grid">
+      <div class="comp-item">
+        <div class="comp-icon">🎛️</div>
+        <div class="comp-name">Arduino Uno / Nano 3.0</div>
+        <div class="comp-price"></div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">🌱</div>
+        <div class="comp-name">RS485 NPK Soil Sensor</div>
+        <div class="comp-price"></div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">📺</div>
+        <div class="comp-name">LCD 16×2 / OLED 128×64</div>
+        <div class="comp-price"></div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">🔄</div>
+        <div class="comp-name">MAX485 Module TTL</div>
+        <div class="comp-price"></div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">🔋</div>
+        <div class="comp-name">แบตลิเธียม 18650 ×2</div>
+        <div class="comp-price"></div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">📦</div>
+        <div class="comp-name">กล่อง FB06 กันน้ำ</div>
+        <div class="comp-price"></div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">🔌</div>
+        <div class="comp-name">DC Jack + สวิตช์</div>
+        <div class="comp-price"></div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-icon">🔗</div>
+        <div class="comp-name">สายไฟจั๊มเปอร์ ×120</div>
+        <div class="comp-price"></div>
+      </div>
+    </div>
+
+    <!-- ROW 2: วิธีดำเนินงาน + ผลการทดลอง -->
+    <div class="two-col">
+      <div class="card orange-accent">
+        <div class="card-title"><span class="icon">🔧</span>วิธีดำเนินงาน</div>
+        <ul>
+          <li>ศึกษาโปรโตคอล Modbus RTU ของเซนเซอร์</li>
+          <li>เชื่อมต่อ MAX485 → Arduino ผ่าน UART</li>
+          <li>เขียนโค้ด Arduino อ่านค่า N, P, K</li>
+          <li>ประกอบวงจรในกล่องกันฝนพร้อม LCD</li>
+          <li>ทดสอบการวัดในสภาพแวดล้อมจริงกลางคืน</li>
+        </ul>
+      </div>
+      <div class="card purple-accent">
+        <div class="card-title"><span class="icon">📊</span>ผลการทดลอง</div>
+        <ul>
+          <li>เครื่องสามารถวัดค่า N, P, K ได้ครบถ้วน</li>
+          <li>แสดงผลบน LCD ทันทีหลังเสียบโพรบ</li>
+          <li>ทำงานได้นานจากแบตเตอรี่ 18650</li>
+          <li>พกพาสะดวก ใช้งานได้ในภาคสนาม</li>
+          <li>ต้นทุนต่ำกว่าเครื่องมือเชิงพาณิชย์มาก</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-box">
+      <div class="result-icon">🏆</div>
+      <div class="result-text">
+        <h3>สรุปผลและประโยชน์ที่ได้รับ</h3>
+        <p>โครงงานนี้ประสบความสำเร็จในการพัฒนาเครื่องวัดธาตุอาหาร N-P-K ในดินแบบพกพา ต้นทุนรวมเพียง <strong style="color:#fff">4,025 บาท</strong> สามารถใช้งานได้ในภาคสนามจริง ช่วยให้เกษตรกรทราบค่าธาตุอาหารในดินได้รวดเร็ว เพื่อวางแผนการใส่ปุ๋ยได้อย่างแม่นยำ ลดต้นทุนและเพิ่มผลผลิตทางการเกษตร</p>
+      </div>
+    </div>
+
+  </div><!-- end body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-text"></div>
+    <div class="footer-badge">🌿 Soil NPK Sensor Project</div>
+  </div>
+
+</div>
+</body>
+</html>
